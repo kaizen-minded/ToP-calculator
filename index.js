@@ -39,20 +39,43 @@ calculator.addEventListener("click", (e) => {
     calculatorState.operator = e.target.innerText;
     calculatorState.previousKeyType = "operator";
   }
+  // This whole if statement could just be a function
   if (dataType === "calculate") {
+    // Is there ever a time when calculatorState.displayValue is not true?
+    // If it is always true just delete this
     if (calculatorState.displayValue && calculatorState.firstOperand) {
+      // Running the operate function then storing the value in calculatorState.displayValue
+      // Looks like I can use deconstruction here
       calculatorState.displayValue = operate(
         calculatorState.operator,
         calculatorState.firstOperand,
         calculatorState.displayValue
       );
-      calculatorState.operator = null;
-      calculatorState.firstOperand = null;
+      // I'm turning the values back to their original settings
+      // Maybe I can do a function that takes unknown amount of arguements
+
+      // calculatorState.operator = null;
+      // calculatorState.firstOperand = null;
+      resetStateValues("operator", "firstOperand");
+      // updateDisplayUI needs to be its own function
       display.innerText = calculatorState.displayValue;
     }
   }
   console.dir(calculatorState);
 });
+
+function resetStateValues(...args) {
+  const originalState = {
+    displayValue: "0",
+    firstOperand: null,
+    operator: null,
+    previousKeyType: null,
+  };
+  args.forEach((value) => {
+    calculatorState[value] = originalState[value];
+  });
+}
+
 clearBtn.addEventListener("click", () => {
   displayValue = "0";
   display.innerText = displayValue;
