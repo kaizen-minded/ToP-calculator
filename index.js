@@ -77,8 +77,13 @@ function resetStateValues(...args) {
 }
 
 clearBtn.addEventListener("click", () => {
-  displayValue = "0";
-  display.innerText = displayValue;
+  resetStateValues(
+    "displayValue",
+    "firstOperand",
+    "operator",
+    "previousKeyType"
+  );
+  display.innerText = calculatorState.displayValue;
 });
 
 function operate(operator, num1, num2) {
