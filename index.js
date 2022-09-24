@@ -58,28 +58,12 @@ clearBtn.addEventListener("click", () => {
   display.innerText = displayValue;
 });
 
-function add(num1, num2) {
-  return num1 + num2;
-}
-
-function subtract(num1, num2) {
-  return num1 - num2;
-}
-
-function multiply(num1, num2) {
-  return num1 * num2;
-}
-
-function divide(num1, num2) {
-  return num1 / num2;
-}
-
 function operate(operator, num1, num2) {
   const operations = {
-    "+": add,
-    "-": subtract,
-    "*": multiply,
-    "/": divide,
+    "+": (num1, num2) => num1 + num2,
+    "-": (num1, num2) => num1 - num2,
+    "*": (num1, num2) => num1 * num2,
+    "/": (num1, num2) => num1 / num2,
   };
   return operations[operator](+num1, +num2);
 }
