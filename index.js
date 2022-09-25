@@ -21,7 +21,7 @@ calculator.addEventListener("click", (e) => {
       resetStateValues("displayValue");
     }
     updateDisplayValue(e.target.innerText);
-    updateDisplayUI(calculatorState);
+    updateDisplayUI();
     setCalculateStateValue("previousKeyType", "number");
   }
   if (dataType === "operator") {
@@ -30,7 +30,7 @@ calculator.addEventListener("click", (e) => {
       calculatorState.firstOperand
     ) {
       setCalculateStateValue("displayValue", operate());
-      updateDisplayUI(calculatorState);
+      updateDisplayUI();
     }
     if (calculatorState.previousKeyType === "calculate") {
       setCalculateStateValue("displayValue", display.innerText);
@@ -42,7 +42,7 @@ calculator.addEventListener("click", (e) => {
   if (dataType === "calculate" && calculatorState.firstOperand) {
     // debugger;
     setCalculateStateValue("displayValue", operate());
-    updateDisplayUI(calculatorState);
+    updateDisplayUI();
     resetStateValues("operator", "firstOperand", "displayValue");
     setCalculateStateValue("previousKeyType", "calculate");
   }
@@ -65,8 +65,8 @@ function resetStateValues(...args) {
   });
 }
 
-function updateDisplayUI({ displayValue }) {
-  display.innerText = displayValue;
+function updateDisplayUI() {
+  display.innerText = calculatorState.displayValue;
 }
 
 clearBtn.addEventListener("click", () => {
@@ -76,7 +76,7 @@ clearBtn.addEventListener("click", () => {
     "operator",
     "previousKeyType"
   );
-  display.innerText = calculatorState.displayValue;
+  updateDisplayUI();
 });
 
 function operate() {
