@@ -16,31 +16,35 @@ calculator.addEventListener("click", (e) => {
   // debugger;
   if (dataType === "number") {
     if (calculatorState.previousKeyType === "operator") {
-      calculatorState.firstOperand = calculatorState.displayValue;
+      setCalculateStateValue("firstOperand", calculatorState.displayValue);
       resetStateValues("displayValue");
-      // calculatorState.displayValue = "0";
+      resetStateValues("displayValue");
     }
     updateDisplayValue(e.target.innerText);
-    display.innerText = calculatorState.displayValue;
-    calculatorState.previousKeyType = "number";
+    updateDisplayUI(calculatorState);
+    setCalculateStateValue("previousKeyType", "number");
   }
   if (dataType === "operator") {
     if (
       calculatorState.previousKeyType === "number" &&
       calculatorState.firstOperand
     ) {
-      // debugger;
-      calculatorState.displayValue = operate();
-      display.innerText = calculatorState.displayValue;
+      setCalculateStateValue("displayValue", operate());
+      updateDisplayUI(calculatorState);
     }
-    calculatorState.operator = e.target.innerText;
-    calculatorState.previousKeyType = "operator";
+    if (calculatorState.previousKeyType === "calculate") {
+      setCalculateStateValue("displayValue", display.innerText);
+    }
+    setCalculateStateValue("operator", e.target.innerText);
+    setCalculateStateValue("previousKeyType", "operator");
   }
   // This whole if statement could just be a function
   if (dataType === "calculate" && calculatorState.firstOperand) {
+    // debugger;
     setCalculateStateValue("displayValue", operate());
-    resetStateValues("operator", "firstOperand");
     updateDisplayUI(calculatorState);
+    resetStateValues("operator", "firstOperand", "displayValue");
+    setCalculateStateValue("previousKeyType", "calculate");
   }
   console.dir(calculatorState);
 });
