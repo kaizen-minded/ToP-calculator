@@ -13,41 +13,47 @@ const clearBtn = document.querySelector("[data-type=clear]");
 
 calculator.addEventListener("click", (e) => {
   const dataType = e.target.getAttribute("data-type");
-  // debugger;
-  if (dataType === "number") {
-    if (calculatorState.previousKeyType === "operator") {
-      setCalculateStateValue("firstOperand", calculatorState.displayValue);
-      resetStateValues("displayValue");
-      resetStateValues("displayValue");
-    }
-    updateDisplayValue(e.target.innerText);
+  const handleActions = {
+    number: handleNumber,
+    operator: handleOperator,
+    calculate: handleCalculate,
+  };
+  handleActions[dataType](e);
+});
+
+function handleNumber(e) {
+  if (calculatorState.previousKeyType === "operator") {
+    setCalculateStateValue("firstOperand", calculatorState.displayValue);
+    resetStateValues("displayValue");
+  }
+  updateDisplayValue(e.target.innerText);
+  updateDisplayUI();
+  setCalculateStateValue("previousKeyType", "number");
+}
+
+function handleOperator(e) {
+  if (
+    calculatorState.previousKeyType === "number" &&
+    calculatorState.firstOperand
+  ) {
+    setCalculateStateValue("displayValue", operate());
     updateDisplayUI();
-    setCalculateStateValue("previousKeyType", "number");
   }
-  if (dataType === "operator") {
-    if (
-      calculatorState.previousKeyType === "number" &&
-      calculatorState.firstOperand
-    ) {
-      setCalculateStateValue("displayValue", operate());
-      updateDisplayUI();
-    }
-    if (calculatorState.previousKeyType === "calculate") {
-      setCalculateStateValue("displayValue", display.innerText);
-    }
-    setCalculateStateValue("operator", e.target.innerText);
-    setCalculateStateValue("previousKeyType", "operator");
+  if (calculatorState.previousKeyType === "calculate") {
+    setCalculateStateValue("displayValue", display.innerText);
   }
-  // This whole if statement could just be a function
-  if (dataType === "calculate" && calculatorState.firstOperand) {
-    // debugger;
+  setCalculateStateValue("operator", e.target.innerText);
+  setCalculateStateValue("previousKeyType", "operator");
+}
+
+function handleCalculate() {
+  if (calculatorState.firstOperand) {
     setCalculateStateValue("displayValue", operate());
     updateDisplayUI();
     resetStateValues("operator", "firstOperand", "displayValue");
     setCalculateStateValue("previousKeyType", "calculate");
   }
-  console.dir(calculatorState);
-});
+}
 
 function setCalculateStateValue(property, value) {
   calculatorState[property] = value;
