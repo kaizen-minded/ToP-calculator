@@ -17,10 +17,22 @@ calculator.addEventListener("click", (e) => {
     number: handleNumber,
     operator: handleOperator,
     calculate: handleCalculate,
+    decimal: handleDecimal,
   };
   handleActions[dataType](e);
+  console.dir(calculatorState);
 });
 
+function handleDecimal() {
+  if (calculatorState.previousKeyType === "operator") {
+    setCalculateStateValue("firstOperand", calculatorState.displayValue);
+    resetStateValues("displayValue");
+  }
+  if (calculatorState.displayValue.includes(".")) return;
+  calculatorState.displayValue += ".";
+  updateDisplayUI();
+  setCalculateStateValue("previousKeyType", "decimal");
+}
 function handleNumber(e) {
   if (calculatorState.previousKeyType === "operator") {
     setCalculateStateValue("firstOperand", calculatorState.displayValue);
