@@ -18,10 +18,43 @@ calculator.addEventListener("click", (e) => {
     operator: handleOperator,
     calculate: handleCalculate,
     decimal: handleDecimal,
+    clear: handleClear,
   };
-  handleActions[dataType](e);
+  handleActions[dataType](e); //For the testing of handleTest
   console.dir(calculatorState);
+  // console.log(e.key);
+  // handleTest(e);
 });
+document.addEventListener("keydown", (e) => {
+  if (Number.isInteger(parseFloat(e.key.trim()))) {
+    handleNumber(e);
+  }
+  if (["+", "-", "*", "/"].includes(e.key)) {
+    handleOperator(e);
+  }
+  if (e.key === "Enter") {
+    handleCalculate();
+  }
+  if (e.key === "Enter") {
+    handleCalculate();
+  }
+  if (e.key === ".") {
+    handleDecimal();
+  }
+  if (e.key.toLowerCase() === "c") {
+    handleClear();
+  }
+});
+
+function handleClear() {
+  resetStateValues(
+    "displayValue",
+    "firstOperand",
+    "operator",
+    "previousKeyType"
+  );
+  updateDisplayUI();
+}
 
 function handleDecimal() {
   if (calculatorState.previousKeyType === "operator") {
@@ -34,16 +67,18 @@ function handleDecimal() {
   setCalculateStateValue("previousKeyType", "decimal");
 }
 function handleNumber(e) {
+  const input = e.key ? e.key : e.target.innerText;
   if (calculatorState.previousKeyType === "operator") {
     setCalculateStateValue("firstOperand", calculatorState.displayValue);
     resetStateValues("displayValue");
   }
-  updateDisplayValue(e.target.innerText);
+  updateDisplayValue(input);
   updateDisplayUI();
   setCalculateStateValue("previousKeyType", "number");
 }
 
 function handleOperator(e) {
+  const input = e.key ? e.key : e.target.innerText;
   if (
     calculatorState.previousKeyType === "number" &&
     calculatorState.firstOperand
@@ -54,7 +89,7 @@ function handleOperator(e) {
   if (calculatorState.previousKeyType === "calculate") {
     setCalculateStateValue("displayValue", display.innerText);
   }
-  setCalculateStateValue("operator", e.target.innerText);
+  setCalculateStateValue("operator", input);
   setCalculateStateValue("previousKeyType", "operator");
 }
 
@@ -86,16 +121,6 @@ function resetStateValues(...args) {
 function updateDisplayUI() {
   display.innerText = calculatorState.displayValue;
 }
-
-clearBtn.addEventListener("click", () => {
-  resetStateValues(
-    "displayValue",
-    "firstOperand",
-    "operator",
-    "previousKeyType"
-  );
-  updateDisplayUI();
-});
 
 function operate() {
   const { displayValue, firstOperand, operator } = calculatorState;
