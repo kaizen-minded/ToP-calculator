@@ -19,9 +19,10 @@ calculator.addEventListener("click", (e) => {
     calculate: handleCalculate,
     decimal: handleDecimal,
     clear: handleClear,
+    backspace: handleBackspace,
   };
   handleActions[dataType](e); //For the testing of handleTest
-  console.dir(calculatorState);
+  // console.dir(calculatorState);
   // console.log(e.key);
   // handleTest(e);
 });
@@ -35,16 +36,29 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     handleCalculate();
   }
-  if (e.key === "Enter") {
-    handleCalculate();
-  }
   if (e.key === ".") {
     handleDecimal();
   }
   if (e.key.toLowerCase() === "c") {
     handleClear();
   }
+  if (e.key === "Backspace") {
+    handleBackspace();
+  }
 });
+
+function handleBackspace() {
+  const { displayValue } = calculatorState;
+  if (displayValue.length === 1 || displayValue === "0") {
+    calculatorState.displayValue = "0";
+  } else {
+    calculatorState.displayValue = displayValue.substring(
+      0,
+      displayValue.length - 1
+    );
+  }
+  updateDisplayUI();
+}
 
 function handleClear() {
   resetStateValues(
